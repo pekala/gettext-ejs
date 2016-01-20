@@ -22,7 +22,7 @@
     "translate",
     "translation"
   ],
-  "author": "Sam Hauglustaine",
+  "author": "Maciej Pekala",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pekala/gettext-ejs/issues"
