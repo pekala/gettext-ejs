@@ -1,0 +1,34 @@
+{
+  "name": "gettext-ejs",
+  "version": "0.1.0",
+  "description": "Extract translatable strings from EJS templates",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "pretest": "eslint index.js",
+    "test": "ava ./test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pekala/gettext-ejs.git"
+  },
+  "keywords": [
+    "ejs",
+    "gettext",
+    "hbs",
+    "i18n",
+    "translate",
+    "translation"
+  ],
+  "author": "Sam Hauglustaine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pekala/gettext-ejs/issues"
+  },
+  "homepage": "https://github.com/pekala/gettext-ejs",
+  "devDependencies": {
+    "ava": "^0.10.0"
+  }
+}
