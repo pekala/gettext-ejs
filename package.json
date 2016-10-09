@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/pekala/gettext-ejs",
   "devDependencies": {
-    "ava": "^0.10.0",
-    "eslint": "^1.10.3"
+    "ava": "0.16.0",
+    "eslint": "3.7.1"
   }
 }
