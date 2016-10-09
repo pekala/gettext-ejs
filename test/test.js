@@ -3,8 +3,10 @@ import fs from 'fs';
 import test from 'ava';
 
 test('default', t => {
-    t.truthy((new Parser()).keywordSpec.gettext.length > 0,
+    t.truthy('msgid' in (new Parser()).keywordSpec.gettext,
         'should have default keyword spec when none is passed');
+    t.truthy('msgid_plural' in (new Parser({gettext: [0, 1]})).keywordSpec.gettext,
+        'should support old keyword spec format');
 });
 
 test.cb('singluar', t => {
