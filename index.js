@@ -71,7 +71,6 @@ function Parser (customKeywordSpec) {
         throw 'Invalid keyword spec';
     }
 
-    // maintain backwards compatibility with `_: [0]` format
     Object.keys(keywordSpec).forEach(function (keyword) {
         var positions = keywordSpec[keyword];
 
