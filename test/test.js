@@ -5,8 +5,36 @@ import test from 'ava';
 test('default', t => {
     t.truthy('msgid' in (new Parser()).keywordSpec.gettext,
         'should have default keyword spec when none is passed');
-    t.truthy('msgid_plural' in (new Parser({gettext: [0, 1]})).keywordSpec.gettext,
-        'should support old keyword spec format');
+});
+
+test('keywords', t => {
+    const parser = new Parser({
+        _: {
+            msgid: 0
+        },
+        ngettext: {
+            msgid: 1,
+            msgid_plural: 2
+        }
+    });
+
+    t.is(parser.keywordSpec._.msgid, 0,
+        'should recognize keyword spec');
+    t.is(parser.keywordSpec.ngettext.msgid, 1,
+        'should recognize msgid position');
+    t.is(parser.keywordSpec.ngettext.msgid_plural, 2,
+        'should recognize msgid_plural position');
+});
+
+test('old keywords', t => {
+    const parser = new Parser({_: [0], ngettext: [1, 2]});
+
+    t.is(parser.keywordSpec._.msgid, 0,
+        'should recognize keyword spec');
+    t.is(parser.keywordSpec.ngettext.msgid, 1,
+        'should recognize msgid position');
+    t.is(parser.keywordSpec.ngettext.msgid_plural, 2,
+        'should recognize msgid_plural position');
 });
 
 test.cb('singluar', t => {
