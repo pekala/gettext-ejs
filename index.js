@@ -37,16 +37,59 @@ var groupParams = function (result, part) {
  */
 function Parser (customKeywordSpec) {
     var keywordSpec = customKeywordSpec || {
-        _: [0],
-        gettext: [0],
-        ngettext: [0, 1]
+        _: {
+            msgid: 0
+        },
+        gettext: {
+            msgid: 0
+        },
+        dgettext: {
+            msgid: 1
+        },
+        dcgettext: {
+            msgid: 1
+        },
+        ngettext: {
+            msgid: 0,
+            msgid_plural: 1
+        },
+        dngettext: {
+            msgid: 1,
+            msgid_plural: 2
+        },
+        pgettext: {
+            msgctxt: 0,
+            msgid: 1
+        },
+        dpgettext: {
+            msgctxt: 1,
+            msgid: 2
+        }
     };
-    var openings = ['<%', '{\\*', '{{'];
-    var closures = ['%>', '\\*}', '}}'];
 
     if (typeof keywordSpec !== 'object') {
         throw 'Invalid keyword spec';
     }
+
+    Object.keys(keywordSpec).forEach(function (keyword) {
+        var positions = keywordSpec[keyword];
+
+        if ('msgid' in positions) {
+            return;
+        } else if (Array.isArray(positions) && positions.length > 0) {
+            // maintain backwards compatibility with `_: [0]` format
+            var order = ['msgid', 'msgid_plural'];
+
+            keywordSpec[keyword] = positions.slice(0).reduce(function (result, pos, idx) {
+                result[order[idx]] = pos;
+
+                return result;
+            }, {});
+        }
+    });
+
+    var openings = ['<%', '{\\*', '{{'];
+    var closures = ['%>', '\\*}', '}}'];
 
     this.keywordSpec = keywordSpec;
     this.expressionPattern = new RegExp([
@@ -77,13 +120,13 @@ Parser.prototype.parse = function (template) {
 
         params = match[2].split(',').reduce(groupParams, []).map(trim).map(trimQuotes);
 
-        msgid = params[this.keywordSpec[keyword][0]];
+        msgid = params[this.keywordSpec[keyword].msgid];
 
         result[msgid] = result[msgid] || { line: [] };
         result[msgid].line.push(template.substr(0, match.index).split(newline).length);
 
-        if (this.keywordSpec[keyword].length > 1) {
-            result[msgid].plural = result[msgid].plural || params[this.keywordSpec[keyword][1]];
+        if (this.keywordSpec[keyword].msgid_plural !== undefined) {
+            result[msgid].plural = result[msgid].plural || params[this.keywordSpec[keyword].msgid_plural];
         }
     }
 
